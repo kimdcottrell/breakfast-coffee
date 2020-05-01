@@ -1,0 +1,9 @@
+.env.*
+requirements/development-override.txt
+
+# caches or user-specific stuff
+.cache
+.local
+.bash_history
+__pycache__
+.idea
