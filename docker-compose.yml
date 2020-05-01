@@ -1,10 +1,12 @@
 version: '3.7'
 
 services:
-  appserver:
+  app:
     stdin_open: true
     tty: true
-    build: .
+    build:
+      context: ./app
+      dockerfile: Dockerfile-${APP_VERSION}
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/usr/src
@@ -16,7 +18,7 @@ services:
     image: postgres:12
     volumes:
       - postgres_data:/var/lib/postgresql/data:delegated
-      - ./db-init-scripts:/docker-entrypoint-initdb.d
+      - ./database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     env_file:
       - .env
     environment:
