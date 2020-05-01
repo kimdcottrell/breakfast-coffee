@@ -1,8 +1,8 @@
 # pull image from the Debian official base
 FROM python:3.8-buster
 
-# set work directory
-WORKDIR /var/www/app
+# it is not recommended to put django files in /var/www - https://docs.djangoproject.com/en/3.0/intro/tutorial01/#console-block-1
+WORKDIR /usr/src/app
 
 # prevents Python from writing pyc files to disc
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -25,4 +25,4 @@ RUN apt-get update \
 RUN pip install --upgrade pip
 
 # run entrypoint.sh
-ENTRYPOINT ["/var/www/entrypoint.sh"]
+ENTRYPOINT ["/usr/src/entrypoint.sh"]

@@ -1,12 +1,12 @@
 #!/bin/sh
 
-pip install -r /var/www/requirements/development-override.txt 2> /dev/null || pip install -r /var/www/requirements/development.txt
+pip install -r /usr/src/requirements/development-override.txt 2> /dev/null || pip install -r /usr/src/requirements/development.txt
 
-#if [ "$DATABASE" = "postgres" ]
+#if [ "$DATABASE_ENGINE" = "django.db.backends.postgresql" ]
 #then
 #    echo "Waiting for postgres..."
 #
-#    while ! nc -z "$SQL_HOST" "$SQL_PORT"; do
+#    while ! nc -z "$DATABASE_HOST" "$DATABASE_HOST"; do
 #      sleep 0.1
 #    done
 #

@@ -1,4 +1,4 @@
-.env.*
+.env*
 requirements/development-override.txt
 
 # caches or user-specific stuff

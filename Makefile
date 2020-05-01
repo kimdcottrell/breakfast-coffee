@@ -1,14 +1,11 @@
 #!make
-sinclude .env.dev
+sinclude .env
 
 .PHONY: help
 
 .DEFAULT_GOAL := help
 
-shell: ## Django: Start a shell as www-data
-	docker-compose exec --user www-data appserver bash -l
-
-root-shell: ## Django: Start a shell as root
+shell: ## Django: Start a shell as root
 	docker-compose exec appserver bash
 
 build: ## Docker: Build or rebuild services
@@ -30,13 +27,14 @@ restart: down build up ## Docker: make down, make build, and make up
 
 destroy: down ## Docker: remove everything regarding this project, as well as all orphaned containers and networks
 	docker system prune -af
+	docker volume prune -f
 
 status: ## Docker: Status of all containers and networks
 	docker ps -a
 	docker network ls
 
 logs: ## Docker: Tail the appserver logs
-	docker-compose logs -tf --tail="50" appserver
+	docker-compose logs -tf --tail="50"
 
 coffee: ## Make: Get your terminal caffeinated
 	@echo $$'\342\230\225\012'
