@@ -1,4 +1,4 @@
 -r default.txt
 -r tests.txt
 
-django-debug-toolbar>=2.2,<2.3
+django-debug-toolbar>=2.2,<2.3 # https://github.com/jazzband/django-debug-toolbar

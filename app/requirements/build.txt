@@ -1,2 +1,4 @@
 -r default.txt
 -r tests.txt
+
+gunicorn>=20.0<21.0

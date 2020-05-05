@@ -7,15 +7,20 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile-${APP_VERSION}
-    command: python manage.py runserver 0.0.0.0:8000
+      target: ${APP_TARGET}
+    command: ${APP_COMMAND}
+    restart: always
     volumes:
       - .:/usr/src
     ports:
       - 8000:8000
     env_file:
       - .env
+    depends_on:
+      - database
   database:
     image: postgres:12
+    restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data:delegated
       - ./database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d

@@ -6,7 +6,7 @@ sinclude .env
 .DEFAULT_GOAL := help
 
 shell: ## Django: Start a shell as root
-	docker-compose exec appserver bash
+	docker-compose exec app bash
 
 build: ## Docker: Build or rebuild services
 	docker-compose build
@@ -26,8 +26,7 @@ pause: ## Docker: Stop services
 restart: down build up ## Docker: make down, make build, and make up
 
 destroy: down ## Docker: remove everything regarding this project, as well as all orphaned containers and networks
-	docker system prune -af
-	docker volume prune -f
+	docker system prune -af --volumes
 
 status: ## Docker: Status of all containers and networks
 	docker ps -a

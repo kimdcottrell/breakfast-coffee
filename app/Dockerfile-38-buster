@@ -1,0 +1,47 @@
+############
+#   BASE   #
+############
+# pull image from the Debian official base
+FROM python:3.8-slim-buster as base
+
+# it is not recommended to put django files in /var/www - https://docs.djangoproject.com/en/3.0/intro/tutorial01/#console-block-1
+WORKDIR /usr/src/app
+
+# prevents Python from writing pyc files to disc
+ENV PYTHONDONTWRITEBYTECODE 1
+# prevents Python from buffering stdout and stderr
+ENV PYTHONUNBUFFERED 1
+
+RUN apt-get update \
+    # dependencies for building Python packages
+    && apt-get install -y build-essential \
+    # psycopg2 dependencies
+    && apt-get install -y libpq-dev gcc \
+    # Django dbshell dependencies
+    && apt-get install -y postgresql-client \
+    # Translations dependencies
+    && apt-get install -y gettext \
+    # cleaning up unused files
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && rm -rf /var/lib/apt/lists/*
+
+######
+# TODO: fix how everything runs as root
+# https://medium.com/@DahlitzF/run-python-applications-as-non-root-user-in-docker-containers-by-example-cba46a0ff384
+# https://github.com/lando/lando/blob/master/plugins/lando-core/scripts/user-perms.sh
+######
+RUN pip install --upgrade pip
+
+#############
+#   LOCAL   #
+#############
+FROM base as dev
+
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+
+#############
+#   BUILD   #
+#############
+FROM base as build
+
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
