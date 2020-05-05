@@ -11,6 +11,15 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import environ
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+
+# reading .env file
+environ.Env.read_env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,12 +29,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get('DEBUG', default=False))
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')
+ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS').split(' ')
 
 
 # Application definition
@@ -73,14 +82,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': os.environ.get('DATABASE_DEFAULT_ENGINE', 'django.database.backends.sqlite3'),
-        'NAME': os.environ.get('DATABASE_DEFAULT_NAME', os.path.join(BASE_DIR, 'database.sqlite3')),
-        'USER': os.environ.get('DATABASE_DEFAULT_USER', 'user'),
-        'PASSWORD': os.environ.get('DATABASE_DEFAULT_PASSWORD', 'password'),
-        'HOST': os.environ.get('DATABASE_DEFAULT_HOST', 'localhost'),
-        'PORT': os.environ.get('DATABASE_DEFAULT_PORT', '5432'),
-    }
+    'default': env.db()
 }
 
 

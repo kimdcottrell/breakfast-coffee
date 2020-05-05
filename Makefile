@@ -6,7 +6,7 @@ sinclude .env
 .DEFAULT_GOAL := help
 
 shell: ## Django: Start a shell as root
-	docker-compose exec app bash
+	docker-compose exec project bash
 
 build: ## Docker: Build or rebuild services
 	docker-compose build
@@ -32,7 +32,7 @@ status: ## Docker: Status of all containers and networks
 	docker ps -a
 	docker network ls
 
-logs: ## Docker: Tail the appserver logs
+logs: ## Docker: Tail the project logs
 	docker-compose logs -tf --tail="50"
 
 coffee: ## Make: Get your terminal caffeinated

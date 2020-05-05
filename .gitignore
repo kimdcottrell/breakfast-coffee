@@ -1,5 +1,5 @@
 .env*
-app/requirements/development-override.txt
+project/requirements/development-override.txt
 
 # caches or user-specific stuff
 .cache
