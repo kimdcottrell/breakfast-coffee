@@ -8,7 +8,6 @@ services:
       context: ./app
       dockerfile: Dockerfile-${APP_VERSION}
       target: ${APP_TARGET}
-    command: ${APP_COMMAND}
     restart: always
     volumes:
       - .:/usr/src

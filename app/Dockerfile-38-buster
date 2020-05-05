@@ -37,11 +37,21 @@ RUN pip install --upgrade pip
 #############
 FROM base as dev
 
+# Docker version 19.03.8 - you need this copy or pip will fail since it can't find the file
+COPY requirements requirements
+RUN pip install -r requirements/development-override.txt 2> /dev/null || pip install -r requirements/development.txt
 ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 #############
 #   BUILD   #
 #############
 FROM base as build
 
+# Docker version 19.03.8 - you need this copy or pip will fail since it can't find the file
+COPY requirements requirements
+
+# TODO: installing this way is causing "ImportError: Couldn't import Django." to be thrown.
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements/build.txt
 ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+CMD ["gunicorn", "project.wsgi:application", "--bind", "0.0.0.0:8000"]
