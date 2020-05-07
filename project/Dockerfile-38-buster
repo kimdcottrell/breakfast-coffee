@@ -58,18 +58,11 @@ RUN apt-get update \
     && apt-get install -y wget curl git vim
 
 ENV NVM_DIR /home/.nvm
-ENV NODE_VERSION 12.16.3
 
 # install nvm with node and npm
 RUN mkdir -p /home/.nvm \
     && curl https://raw.githubusercontent.com/creationix/nvm/v0.35.3/install.sh | bash \
-    && . $NVM_DIR/nvm.sh \
-    && nvm install $NODE_VERSION \
-    && nvm alias default $NODE_VERSION \
-    && nvm use default
-
-ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
-ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
+    && . $NVM_DIR/nvm.sh
 
 ENTRYPOINT ["/usr/src/project/entrypoint.sh"]
 

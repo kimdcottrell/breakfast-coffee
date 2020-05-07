@@ -24,6 +24,12 @@ export PS1="\[\033[1;35m\]\u\[\033[1;94m\]@\[\033[1;35m\]\${HOST}\[\033[0;36m\]:
 EOF
 }
 
+create_bash_profile(){
+  touch "$HOME"/.bash_profile
+  echo "[ -f $HOME/.bashrc ] && . $HOME/.bashrc" > "$HOME"/.bash_profile
+  source "$HOME"/.bash_profile
+}
+
 empty_db_and_create_tables(){
   echo 'Running empty_db_and_create_tables()'
   python manage.py flush --no-input
@@ -52,6 +58,7 @@ setup_ssh_keys(){
   chmod 644 ~/.ssh/config # TODO: this file can cause headaches if something specific to the local machine exists. add in a check.
 }
 
+create_bash_profile
 edit_bashrc
 empty_db_and_create_tables
 create_admin_password_superuser
