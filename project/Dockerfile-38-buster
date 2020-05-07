@@ -13,7 +13,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # Replace shell with bash so we can source files and use arrays since POSIX doesn't allow for either
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+SHELL ["/bin/bash", "-c"]
 
 RUN DEPENDENT_PACKAGES=( \
     # dependencies for building Python packages \
