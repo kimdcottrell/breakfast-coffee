@@ -17,6 +17,8 @@ services:
       - .env
     depends_on:
       - database
+    environment:
+      COMPOSE_LOCAL_PWD: $PWD
   database:
     image: postgres:12
     restart: always
@@ -29,7 +31,7 @@ services:
       POSTGRES_USER: ${DATABASE_POSTGRES_SUPERUSER}
       POSTGRES_PASSWORD: ${DATABASE_POSTGRES_SUPERPASS}
       POSTGRES_DB: ${DATABASE_POSTGRES_SCHEMA_NAME}
-
+      COMPOSE_LOCAL_PWD: $PWD
 
 volumes:
   postgres_data:

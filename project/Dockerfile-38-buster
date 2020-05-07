@@ -12,16 +12,27 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # prevents Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED 1
 
-RUN apt-get update \
-    # dependencies for building Python packages
-    && apt-get install -y build-essential \
-    # psycopg2 dependencies
-    && apt-get install -y libpq-dev gcc \
-    # Django dbshell dependencies
-    && apt-get install -y postgresql-client \
-    # Translations dependencies
-    && apt-get install -y gettext \
-    # cleaning up unused files
+# Replace shell with bash so we can source files and use arrays since POSIX doesn't allow for either
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+RUN DEPENDENT_PACKAGES=( \
+    # dependencies for building Python packages \
+        build-essential \
+    # basic bash commands \
+        curl \
+        wget \
+    # psycopg2 dependencies \
+        libpq-dev \
+        gcc \
+    # Django dbshell dependencies \
+        postgresql-client \
+    # Translations dependencies \
+        gettext \
+    ) \
+    && apt-get update \
+    # dependencies for building Python packages and doing basic terminal operations
+    && apt-get install -y ${DEPENDENT_PACKAGES[@]} \
+    # cleaning up unused files \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
@@ -39,7 +50,27 @@ FROM base as dev
 
 COPY requirements requirements
 
+# install python packages, with a developer-override if someone wants to override the existing developer.txt requirements
 RUN pip install -r requirements/development-override.txt 2> /dev/null || pip install -r requirements/development.txt
+
+# install common dev utilities
+RUN apt-get update \
+    && apt-get install -y wget curl git vim
+
+# or ~/.nvm , depending
+ENV NVM_DIR /usr/src/.nvm
+ENV NODE_VERSION 12.16.3
+
+# Install nvm with node and npm
+RUN mkdir /usr/src/.nvm \
+    && curl https://raw.githubusercontent.com/creationix/nvm/v0.35.3/install.sh | bash \
+    && . $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
+
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
 
 ENTRYPOINT ["/usr/src/project/entrypoint.sh"]
 
