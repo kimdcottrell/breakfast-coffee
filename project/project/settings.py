@@ -33,9 +33,7 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS').split(' ')
 
-
 # Application definition
-
 INSTALLED_APPS = [
     'coffee',
     'django.contrib.admin',
@@ -108,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 
@@ -119,5 +117,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
-STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    # django.contrib.staticfiles sends files here for dev purposes as long as DEBUG=1
+    os.path.join(BASE_DIR, "project/static/")
+]
+# altered the url path of static dir for funsies
+STATIC_URL = '/assets/'
+# ./manage.py collectstatic now works. you would use this dir to serve assets during deployment
+STATIC_ROOT = '/var/www/static'

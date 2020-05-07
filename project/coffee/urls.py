@@ -3,6 +3,5 @@ from .views import *
 
 urlpatterns = [
     path('', index),
-    path('espresso/', espresso),
-    path('drip/', drip),
+    path('recipe/<int:recipe_id>/', recipe),
 ]

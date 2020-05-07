@@ -1,24 +1,17 @@
+from .models import Recipe
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
-
-# Create your views here.
 
 def index(request):
-    return HttpResponse("""
-    <h1>Welcome to coffee!</h1>
-    <ul>
-        <li><a href="espresso">espresso</a></li>
-        <li><a href="drip">drip</a></li>
-    </ul>
-    """)
+    recipes = Recipe.objects.all()
+    return render(request, 'index.html', {'recipes': recipes})
 
 
-def espresso(request):
-    response = HttpResponse("<h1>Welcome to espresso!</h1>")
-    response.status_code = 200
-    return response
+def recipe(request, recipe_id):
+    try:
+        single_recipe = Recipe.objects.get(pk=recipe_id)
+    except Recipe.DoesNotExist:
+        raise Http404("Recipe does not exist! :(")
+    return render(request, 'recipe.html', {'recipe': single_recipe})
 
-
-def drip(request):
-    return HttpResponse("<h1>Drip coffee is okay too...</h1>")
