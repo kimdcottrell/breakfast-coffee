@@ -10,6 +10,7 @@ do
 done
 
 if [[ ${APP_TARGET} == 'dev' ]]; then
+  # edit the bashrc here since guessing the correct place on the filesystem is a pita
   cat <<- EOF >> "$HOME"/.bashrc
   # injecting the intended hostname into docker is hard. fake it instead
   HOST=\${COMPOSE_LOCAL_PWD##*/}
@@ -23,6 +24,7 @@ if [[ ${APP_TARGET} == 'dev' ]]; then
   export PS1="\[\033[1;35m\]\u\[\033[1;94m\]@\[\033[1;35m\]\${HOST}\[\033[0;36m\]:\w\[\033[33m\] \$(parse_git_branch)\[\033[00m\] $ "
 EOF
 
+  # empty the db then populate with migration data
   python manage.py flush --no-input
   python manage.py migrate
 
