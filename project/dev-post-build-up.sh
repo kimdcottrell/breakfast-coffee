@@ -2,7 +2,9 @@
 
 # bail out of here if we're already done this stuff before
 # TODO: find a way to test this
+echo 'Doing bail check for dev-post-build-up...'
 grep -Pzoq "parse_git_branch" "$HOME"/.bashrc && return
+echo 'Continuing dev-post-build-up...'
 
 edit_bashrc(){
   echo 'Running edit_bashrc()'
@@ -37,8 +39,8 @@ create_admin_password_superuser(){
 setup_ssh_keys(){
   echo 'Running setup_ssh_keys()'
   # copy the ssh keys into the right place
-  [[ ! -d ~/.ssh/ ]] && mkdir ~/.ssh
-  find /usr/local/machine/.ssh -type f -name "*" ! -name "known_hosts" ! -name "authorized_keys" -exec mv -t ~/.ssh {} +
+  mkdir ~/.ssh
+  find /usr/local/machine/.ssh -type f -name "*" ! -name "known_hosts" ! -name "authorized_keys" -exec cp "{}" ~/.ssh \;
   touch ~/.ssh/known_hosts ~/.ssh/authorized_keys
 
   # give the ssh keys the right permissions
