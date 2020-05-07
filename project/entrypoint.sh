@@ -30,6 +30,19 @@ EOF
 
   # create a simple superuser
   echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@breakfast.coffee', 'password')" | python manage.py shell
+
+  # copy the ssh keys into the right place
+  mkdir ~/.ssh
+  find /usr/local/machine/.ssh -type f -name "*" ! -name "known_hosts" ! -name "authorized_keys" -exec mv -t ~/.ssh {} +
+  touch ~/.ssh/known_hosts ~/.ssh/authorized_keys
+
+  # give the ssh keys the right permissions
+  chmod 600 ~/.ssh/*
+  chmod 644 ~/.ssh/*.pub
+  chmod 700 ~/.ssh
+  chmod 644 ~/.ssh/authorized_keys
+  chmod 644 ~/.ssh/known_hosts
+  chmod 644 ~/.ssh/config
 fi
 
 exec "$@"
