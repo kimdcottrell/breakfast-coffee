@@ -57,12 +57,11 @@ RUN pip install -r requirements/development-override.txt 2> /dev/null || pip ins
 RUN apt-get update \
     && apt-get install -y wget curl git vim
 
-# or ~/.nvm , depending
-ENV NVM_DIR /usr/src/.nvm
+ENV NVM_DIR /home/.nvm
 ENV NODE_VERSION 12.16.3
 
 # install nvm with node and npm
-RUN mkdir /usr/src/.nvm \
+RUN mkdir -p /home/.nvm \
     && curl https://raw.githubusercontent.com/creationix/nvm/v0.35.3/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
