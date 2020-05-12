@@ -75,10 +75,11 @@ RUN pip install -r requirements/development-override.txt 2> /dev/null || pip ins
 RUN apt-get update \
     && apt-get install -y wget curl git vim
 
-# make a fancy bash prompt
+# optional fancy bash prompt that people can add via README instructions
 RUN mkdir /usr/local/prompt \
     && git clone https://github.com/magicmonty/bash-git-prompt.git /usr/prompt
 
+# make it possible to test different versions of node/npm without rebuilding
 ENV NVM_DIR /home/.nvm
 ENV NODE_VERSION $node_version
 

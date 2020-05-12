@@ -8,6 +8,9 @@ sinclude .env
 shell: ## Django: Start a shell as root
 	docker-compose exec project bash
 
+dbshell: ## Postgres: Start a connection to postgres as the superuser
+	docker-compose exec -u postgres database psql
+
 build: ## Docker: Build or rebuild services
 	docker-compose build
 
