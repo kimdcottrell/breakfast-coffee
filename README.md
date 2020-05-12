@@ -35,7 +35,7 @@ The project container runs via a bash shell. The [bash-git-prompt](https://githu
 
 By default, `docker-compose up`/`make up` will start both the `docker-compose.yml` and `docker-compose.override.yml` files. 
 
-#### Create a `docker-compose.override.yml`
+#### Create a `./docker-compose.override.yml`
 
 ```yaml
 version: '3.7'
@@ -49,7 +49,7 @@ services:
       - ./project/.git-prompt-colors.sh:/root/.git-prompt-colors.sh
 ```
 
-#### Create a `project/.bashrc`
+#### Create a `./project/.bashrc`
 
 ```bash
 force_color_prompt=yes
@@ -64,7 +64,7 @@ if [ -f "/usr/prompt/gitprompt.sh" ]; then
 fi
 ```
 
-#### Create a `.git-prompt-colors.sh` 
+#### Create a `./project/.git-prompt-colors.sh` 
 
 This file is based off the [Custom template](https://github.com/magicmonty/bash-git-prompt/blob/master/themes/Custom.bgptemplate)
 
