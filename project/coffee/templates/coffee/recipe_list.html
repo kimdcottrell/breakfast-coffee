@@ -1,0 +1,9 @@
+hey it's a bunch of recipes!
+
+{% for recipe in object_list %}
+    <div>
+        <p>published: {{ recipe.created_at }}</p>
+        <h2><a href="{{ recipe.id }}">{{ recipe.name }}</a></h2>
+        <p>{{ recipe.description|linebreaksbr }}</p>
+    </div>
+{% endfor %}

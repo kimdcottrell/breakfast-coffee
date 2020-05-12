@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 DATABASES = {
-    'default': env.db()
+    'default': env.db(),
 }
 
 
@@ -119,9 +119,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 STATICFILES_DIRS = [
     # django.contrib.staticfiles sends files here for dev purposes as long as DEBUG=1
-    os.path.join(BASE_DIR, "project/static/")
+    os.path.join(BASE_DIR, "project/static/source")
 ]
 # altered the url path of static dir for funsies
 STATIC_URL = '/assets/'
 # ./manage.py collectstatic now works. you would use this dir to serve assets during deployment
-STATIC_ROOT = '/var/www/static'
+STATIC_ROOT = os.path.join(BASE_DIR, "project/static/compiled")

@@ -2,7 +2,10 @@
 #   BASE   #
 ############
 # pull image from the Debian official base
-FROM python:3.8-slim-buster as base
+FROM python:3.8-buster as base
+
+# doing this since Dockerfiles don't like to accept vars from docker-compose's env_file
+ARG postgres_version
 
 # it is not recommended to put django files in /var/www - https://docs.djangoproject.com/en/3.0/intro/tutorial01/#console-block-1
 WORKDIR /usr/src/project
@@ -12,20 +15,30 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # prevents Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED 1
 
-# Replace shell with bash so we can source files and use arrays since POSIX doesn't allow for either
+# replace shell with bash so we can source files and use arrays since POSIX doesn't allow for either
 SHELL ["/bin/bash", "-c"]
+
+# make it possible to get the correct version of the postgres-client
+ENV POSTGRES_VERSION $postgres_version
+RUN apt-get install -y wget \
+    && mkdir -p /etc/apt/sources.list.d \
+    && touch /etc/apt/sources.list.d/pgdg.list \
+    && echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
 RUN DEPENDENT_PACKAGES=( \
     # dependencies for building Python packages \
         build-essential \
     # basic bash commands \
         curl \
-        wget \
+        vim \
+    # if the locales package is not installed, some tests will fail with a UnicodeEncodeError
+        locales \
     # psycopg2 dependencies \
         libpq-dev \
         gcc \
     # Django dbshell dependencies \
-        postgresql-client \
+        postgresql-client-${POSTGRES_VERSION} \
     # Translations dependencies \
         gettext \
     ) \
@@ -36,11 +49,14 @@ RUN DEPENDENT_PACKAGES=( \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
-######
-# TODO: fix how everything runs as root
-# https://medium.com/@DahlitzF/run-python-applications-as-non-root-user-in-docker-containers-by-example-cba46a0ff384
-# https://github.com/lando/lando/blob/master/plugins/lando-core/scripts/user-perms.sh
-######
+# setup locales to run properly with en_US.UTF-8
+RUN echo "locales locales/default_environment_locale select en_US.UTF-8" | debconf-set-selections \
+    && echo "locales locales/locales_to_be_generated multiselect en_US.UTF-8 UTF-8" | debconf-set-selections \
+    && rm "/etc/locale.gen" \
+    && dpkg-reconfigure --frontend noninteractive locales
+ENV LANG "en_US.UTF-8"
+ENV LANGUAGE "en_US.UTF-8"
+
 RUN pip install --upgrade pip
 
 #############
@@ -48,7 +64,14 @@ RUN pip install --upgrade pip
 #############
 FROM base as dev
 
+ARG node_version
+
 COPY requirements requirements
+
+# conditionally include .bashrc
+# workaround for conditional includes; http://redgreenrepeat.com/2018/04/13/how-to-conditionally-copy-file-in-dockerfile/
+COPY entrypoint.sh .bashrc* ./
+RUN cp .bashrc /root/.bashrc || touch /root/.bashrc
 
 # install python packages, with a developer-override if someone wants to override the existing developer.txt requirements
 RUN pip install -r requirements/development-override.txt 2> /dev/null || pip install -r requirements/development.txt
@@ -57,12 +80,23 @@ RUN pip install -r requirements/development-override.txt 2> /dev/null || pip ins
 RUN apt-get update \
     && apt-get install -y wget curl git vim
 
+# make a fancy bash prompt
+RUN mkdir /usr/local/prompt \
+    && git clone https://github.com/magicmonty/bash-git-prompt.git /usr/prompt
+
 ENV NVM_DIR /home/.nvm
+ENV NODE_VERSION $node_version
 
 # install nvm with node and npm
 RUN mkdir -p /home/.nvm \
     && curl https://raw.githubusercontent.com/creationix/nvm/v0.35.3/install.sh | bash \
-    && . $NVM_DIR/nvm.sh
+    && . $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
+
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 ENTRYPOINT ["/usr/src/project/entrypoint.sh"]
 
@@ -74,6 +108,12 @@ CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 FROM base as build
 
 COPY requirements requirements
+
+######
+# TODO: fix how everything runs as root
+# https://medium.com/@DahlitzF/run-python-applications-as-non-root-user-in-docker-containers-by-example-cba46a0ff384
+# https://github.com/lando/lando/blob/master/plugins/lando-core/scripts/user-perms.sh
+######
 
 # TODO: installing this way is causing "ImportError: Couldn't import Django." to be thrown.
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/project/wheels -r requirements/build.txt

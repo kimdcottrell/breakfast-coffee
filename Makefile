@@ -15,7 +15,7 @@ up: ## Docker: Builds (or fetch from cache), (re)creates, starts, and attaches t
 	docker-compose up -d
 
 down: ## Docker: Stop and remove containers, networks, images, and volumes
-	docker-compose down -v
+	docker-compose down -v --remove-orphans
 
 start: ## Docker: Start services
 	docker-compose start

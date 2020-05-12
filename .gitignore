@@ -1,5 +1,8 @@
 .env*
 project/requirements/development-override.txt
+project/project/static/compiled/*
+!project/project/static/compiled/.gitkeep
+.bashrc
 
 # caches or user-specific stuff
 .cache

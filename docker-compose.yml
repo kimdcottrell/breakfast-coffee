@@ -2,12 +2,14 @@ version: '3.7'
 
 services:
   project:
-    stdin_open: true
     tty: true
     build:
       context: project
       dockerfile: Dockerfile-${APP_VERSION}
       target: ${APP_TARGET}
+      args:
+        postgres_version: ${POSTGRES_VERSION}
+        node_version: ${NODE_VERSION}
     restart: always
     volumes:
       - .:/usr/src
@@ -21,7 +23,7 @@ services:
     environment:
       COMPOSE_LOCAL_PWD: $PWD
   database:
-    image: postgres:12
+    image: postgres:${POSTGRES_VERSION}
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data:delegated
@@ -31,7 +33,7 @@ services:
     environment:
       POSTGRES_USER: ${DATABASE_POSTGRES_SUPERUSER}
       POSTGRES_PASSWORD: ${DATABASE_POSTGRES_SUPERPASS}
-      POSTGRES_DB: ${DATABASE_POSTGRES_SCHEMA_NAME}
+      POSTGRES_DB: ${DATABASE_POSTGRES_DB_NAME}
       COMPOSE_LOCAL_PWD: $PWD
 
 volumes:

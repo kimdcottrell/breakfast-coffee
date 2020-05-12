@@ -1,17 +1,12 @@
 from .models import Recipe
-from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.views import generic
 
 
-def index(request):
-    recipes = Recipe.objects.all()
-    return render(request, 'index.html', {'recipes': recipes})
+class IndexView(generic.ListView):
+    def get_queryset(self):
+        return Recipe.objects.all()[:5]
 
 
-def recipe(request, recipe_id):
-    try:
-        single_recipe = Recipe.objects.get(pk=recipe_id)
-    except Recipe.DoesNotExist:
-        raise Http404("Recipe does not exist! :(")
-    return render(request, 'recipe.html', {'recipe': single_recipe})
+class DetailView(generic.DetailView):
+    model = Recipe
 
