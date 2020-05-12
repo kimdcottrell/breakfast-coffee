@@ -68,11 +68,6 @@ ARG node_version
 
 COPY requirements requirements
 
-# conditionally include .bashrc
-# workaround for conditional includes; http://redgreenrepeat.com/2018/04/13/how-to-conditionally-copy-file-in-dockerfile/
-COPY entrypoint.sh .bashrc* ./
-RUN cp .bashrc /root/.bashrc || touch /root/.bashrc
-
 # install python packages, with a developer-override if someone wants to override the existing developer.txt requirements
 RUN pip install -r requirements/development-override.txt 2> /dev/null || pip install -r requirements/development.txt
 

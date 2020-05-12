@@ -3,6 +3,8 @@ project/requirements/development-override.txt
 project/project/static/compiled/*
 !project/project/static/compiled/.gitkeep
 .bashrc
+.git-prompt-colors.sh
+docker-compose.override.yml
 
 # caches or user-specific stuff
 .cache
