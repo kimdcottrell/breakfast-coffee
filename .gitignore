@@ -1,12 +1,14 @@
 .env*
 project/requirements/development-override.txt
-project/project/static/compiled/*
-!project/project/static/compiled/.gitkeep
+project/static/src/*
+project/static/dist/*
+!project/static/*/.gitkeep
+
+# caches or user-specific stuff
+node_modules
 .bashrc
 .git-prompt-colors.sh
 docker-compose.override.yml
-
-# caches or user-specific stuff
 .cache
 .local
 .bash_history

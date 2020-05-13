@@ -59,7 +59,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -119,9 +119,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 STATICFILES_DIRS = [
     # django.contrib.staticfiles sends files here for dev purposes as long as DEBUG=1
-    os.path.join(BASE_DIR, "project/static/source")
+    os.path.join(BASE_DIR, "static/src")
 ]
 # altered the url path of static dir for funsies
 STATIC_URL = '/assets/'
 # ./manage.py collectstatic now works. you would use this dir to serve assets during deployment
-STATIC_ROOT = os.path.join(BASE_DIR, "project/static/compiled")
+STATIC_ROOT = os.path.join(BASE_DIR, "static/dist")
+
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
