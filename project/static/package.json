@@ -1,0 +1,48 @@
+{
+  "name": "breakfast_coffee",
+  "version": "0.0.1",
+  "main": "gulpfile.babel.js",
+  "scripts": {
+    "start": "./node_modules/gulp/bin/gulp.js",
+    "build": "./node_modules/gulp/bin/gulp.js build --production"
+  },
+  "dependencies": {
+    "foundation-sites": "^6.6.3",
+    "jquery": "^3.5.1",
+    "motion-ui": "^2.0.3",
+    "what-input": "^5.2.9"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/register": "^7.0.0",
+    "autoprefixer": "^9.1.5",
+    "babel-loader": "^8.0.4",
+    "browser-sync": "^2.10.0",
+    "gulp": "^4.0.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-clean-css": "^3.3.1",
+    "gulp-cli": "^2.0.1",
+    "gulp-concat": "^2.5.2",
+    "gulp-extname": "^0.2.0",
+    "gulp-if": "^2.0.0",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-load-plugins": "^1.1.0",
+    "gulp-postcss": "^8.0.0",
+    "gulp-sass": "^4.0.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-terser": "^1.2.0",
+    "gulp-run-command": "^0.0.10",
+    "js-yaml": "^3.4.6",
+    "rimraf": "^2.4.3",
+    "uncss": "^0.16.2",
+    "vinyl-named": "^1.1.0",
+    "webpack": "^4.20.2",
+    "webpack-stream": "^5.1.1",
+    "yargs": "^12.0.2"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "private": true
+}

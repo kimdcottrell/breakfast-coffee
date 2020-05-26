@@ -13,7 +13,7 @@ services:
     restart: always
     volumes:
       - .:/usr/src
-      - ~/.ssh:/usr/local/machine/.ssh
+      - ~/.ssh:/usr/local/machine/.ssh:ro
     ports:
       - 8000:8000
     env_file:

@@ -1,7 +1,7 @@
 .env*
 project/requirements/development-override.txt
-project/static/src/*
 project/static/dist/*
+project/static/node_modules
 !project/static/*/.gitkeep
 
 # caches or user-specific stuff

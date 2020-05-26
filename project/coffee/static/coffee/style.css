@@ -1,5 +1,19 @@
 body{
-    background: #cccccc;
     font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
     font-size: 14px;
 }
+
+@media (prefers-color-scheme: light) {
+    body {
+        background-color: white;
+        color: black;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: black;
+        color: white;
+    }
+}
+

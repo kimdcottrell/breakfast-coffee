@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar'
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+
+# IP's that the debug toolbar is allowed to show on
+INTERNAL_IPS = [
+    '127.0.0.1',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -119,11 +126,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 STATICFILES_DIRS = [
     # django.contrib.staticfiles sends files here for dev purposes as long as DEBUG=1
-    os.path.join(BASE_DIR, "static/src")
+    os.path.join(BASE_DIR, "static/dist/assets"),
 ]
 # altered the url path of static dir for funsies
 STATIC_URL = '/assets/'
 # ./manage.py collectstatic now works. you would use this dir to serve assets during deployment
-STATIC_ROOT = os.path.join(BASE_DIR, "static/dist")
+STATIC_ROOT = os.path.join(BASE_DIR, "assets")
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
