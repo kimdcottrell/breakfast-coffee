@@ -2,18 +2,15 @@ version: '3.7'
 
 services:
   project:
-    tty: true
     build:
-      context: project
-      dockerfile: Dockerfile-${APP_VERSION}
+      context: .
+      dockerfile: project/Dockerfile # the dir here instead of in context allows for `COPY .env .env` in the Dockerfile
       target: ${APP_TARGET}
       args:
         postgres_version: ${POSTGRES_VERSION}
-        node_version: ${NODE_VERSION}
     restart: always
     volumes:
       - .:/usr/src
-      - ~/.ssh:/usr/local/machine/.ssh:ro
     ports:
       - 8000:8000
     env_file:
@@ -35,6 +32,18 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_POSTGRES_SUPERPASS}
       POSTGRES_DB: ${DATABASE_POSTGRES_DB_NAME}
       COMPOSE_LOCAL_PWD: $PWD
+  node:
+    image: node:${NODE_VERSION}
+    restart: 'no'
+    command: /bin/true # only run the container when you need it
+    volumes:
+      - .:/usr/src
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
+      - 3001:3001
+      - 8000:8001
 
 volumes:
   postgres_data:

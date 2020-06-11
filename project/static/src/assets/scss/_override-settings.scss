@@ -1,0 +1,67 @@
+// 0. Custom
+// ---------
+$pale-ghost      : #ececec;
+$ghost           : #d2d1d1;
+$rue             : #07242A;
+$coal            : #405260;
+$burnt-coal      : darken($coal, 5);
+$dull-grape      : #8b7a92;
+$pale-grape      : #ae9db5;
+$pale-rose       : #c67b8d;
+$stained-wood    : #B98560;
+$old-wood        : #E1D2BB;
+$off-white       : #f9f9f9;
+
+$ghost-rose: lighten($pale-rose, 25);
+
+$twitter-official: lighten(#1da1f2, 15);
+$facebook-official: lighten(#3b5998, 25);
+$linkedin-official: lighten(#0077b5, 25);
+$github-official: lighten(#6cc644, 15);
+
+$nav-active-background: darken($dull-grape, 15);
+$nav-active-color: lighten($old-wood, 10);
+
+$important-font: 'Playfair Display', cursive;
+$common-font: 'Pt Sans', sans-serif;
+$handwriting-font: 'Indie Flower', cursive;
+
+// 1. Global
+// ---------
+
+$foundation-palette: (
+  primary: $pale-grape,
+  secondary: #767676,
+  success: #5ab956,
+  warning: #ffae00,
+  alert: #cc4b37,
+);
+
+$body-background: $off-white;
+$body-font-color: $rue;
+$body-font-family: $common-font;
+
+// 4. Base Typography
+// ------------------
+
+$header-font-family: $important-font;
+$header-font-weight: $global-weight-bold;
+$header-color: $dull-grape;
+$header-lineheight: 1.2;
+$header-margin-bottom: 1rem;
+
+$anchor-color: $pale-rose;
+$anchor-color-hover: $primary-color;
+
+$hr-border: 1px solid $old-wood;
+
+// 5. Typography Helpers
+// ---------------------
+
+$subheader-lineheight: 1.2;
+
+// 11. Button
+
+$button-background-hover: $anchor-color-hover;
+$button-margin: 0;
+

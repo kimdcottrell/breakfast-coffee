@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# allow for devs to easily swap the node/npm version by changing the .nvmrc and restarting
-source "$NVM_DIR"/nvm.sh
-
 # double check the db is go to accept connections before you do operations
 until pg_isready -h database | grep -q 'accepting connections';
 do
@@ -10,10 +7,15 @@ do
   sleep 2
 done
 
-if [[ ${APP_TARGET} == 'dev' ]]; then
-  bash dev-post-build-up.sh
-  source "$HOME"/.bashrc
-fi
+# run migrations here since the database container needs to be running
+python manage.py flush --no-input
+python manage.py migrate
+
+#
+echo "from django.contrib.auth import get_user_model;" \
+  "User = get_user_model();" \
+  "User.objects.create_superuser('admin', 'admin@breakfast.coffee', 'password')" \
+  | python manage.py shell
 
 exec "$@"
 

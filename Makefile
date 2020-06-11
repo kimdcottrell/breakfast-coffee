@@ -5,6 +5,9 @@ sinclude .env
 
 .DEFAULT_GOAL := help
 
+watch: ## NPM: watch
+	docker-compose run --rm -w /usr/src/project/static node npm run start
+
 shell: ## Django: Start a shell as root
 	docker-compose exec project bash
 

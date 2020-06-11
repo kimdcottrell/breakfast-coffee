@@ -124,7 +124,11 @@ function images() {
 function server(done) {
   run('python ../manage.py runserver');
   browser.init({
-    server: PATHS.dist, port: PORT
+    port: PORT,
+    notify: false,
+    localOnly: true,
+    open: false,
+    proxy: 'localhost:8000',
   }, done);
 }
 
@@ -138,6 +142,6 @@ function reload(done) {
 function watch() {
   gulp.watch(PATHS.assets, copy);
   gulp.watch('src/assets/scss/**/*.scss').on('all', sass);
-  gulp.watch('src/assets/js/**/*.js').on('all', gulp.series(javascript, browser.reload));
-  gulp.watch('src/assets/img/**/*').on('all', gulp.series(images, browser.reload));
+  gulp.watch('src/assets/js/**/*.js').on('all', gulp.series(javascript, reload));
+  gulp.watch('src/assets/img/**/*').on('all', gulp.series(images, reload));
 }
